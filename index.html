@@ -194,7 +194,7 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 5px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
+            font-size: 16px;
         }
 
         .matrix-cell {
@@ -206,7 +206,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            min-height: 40px;
+            min-height: 60px;
             word-break: break-word;
             color: var(--text-main);
         }
@@ -292,7 +292,7 @@
             },
             formatSymbol: (funcType, val) => {
                 const thetaMatch = String(val).match(/^(?:theta|q|t|θ)_?(\d+)$/i);
-                const sub = thetaMatch ? `<sub>${thetaMatch[1]}</sub>` : `(${val})`;
+                const sub = thetaMatch ? `${thetaMatch[1]}` : `(${val})`;
                 return (funcType === 'cos' ? 'C' : 'S') + sub;
             },
             mult: (a, b) => {
