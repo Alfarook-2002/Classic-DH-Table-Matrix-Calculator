@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DH Matrix Calculator</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #333333;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --th-bg: #f1f5f9;
+            --input-bg: #ffffff;
+            --matrix-cell-bg: #f8fafc;
+        }
+
+        body.dark-mode {
+            --primary: #3b82f6;
+            --bg: #0f172a;
+            --surface: #1e293b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --th-bg: #334155;
+            --input-bg: #0f172a;
+            --matrix-cell-bg: #0f172a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: var(--bg);
+            color: var(--text-main);
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            color: var(--text-main);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.2em;
+            margin-bottom: 25px;
+        }
+
+        /* Dark Mode Button - Emoji Only */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            padding: 0;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--th-bg);
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 8px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        input {
+            padding: 8px;
+            width: 100%;
+            border: 1px solid var(--border);
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: 2px solid var(--primary);
+            border-color: transparent;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+
+        .btn-mini {
+            padding: 4px 10px;
+            font-size: 14px;
+            background: var(--th-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            min-width: 32px;
+        }
+        .btn-mini:hover {
+            background: var(--border);
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
+        
+        .btn-secondary { background-color: #64748b; color: white; }
+        .btn-secondary:hover { background-color: #475569; }
+
+        .btn-danger { background-color: #ef4444; color: white; }
+        .btn-danger:hover { background-color: #dc2626; }
+
+        .btn-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+        .btn-outline:hover { background-color: var(--th-bg); color: var(--text-main); }
+
+        .matrix-container {
+            background: var(--surface);
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+            border: 1px solid var(--border);
+        }
+
+        .matrix-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            font-size: 1.2em;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .matrix-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+        }
+
+        .matrix-cell {
+            background: var(--matrix-cell-bg);
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 40px;
+            word-break: break-word;
+            color: var(--text-main);
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme">🌙</button>
+
+    <h1>Classic DH Table Matrix Calculator</h1>
+    <div class="subtitle">
+        <strong>Standard DH Convention</strong> (Rot<sub>z,θ</sub> &rarr; Trans<sub>z,d</sub> &rarr; Trans<sub>x,a</sub>(X) &rarr; Rot<sub>x,α</sub>)<br>
+        Order of Multiplication: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub>
+    </div>
+
+    <div class="controls">
+		<button class="btn-danger" onclick="removeRow()"><b>- Remove Joint</b></button>
+        <button class="btn-secondary" onclick="addRow()"><b>+ Add Joint</b></button>
+		<button class="btn-outline" onclick="clearTable()"><b>🗑️ clear</b></button>
+    </div>
+    
+    <table id="dhTable">
+        <thead>
+            <tr>
+                <th style="width: 60px;">Joint</th>
+                <th>θ (theta)</th>
+                <th>d</th>
+                <th>a</th>
+                <th>α (alpha)</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Rows generated by JS -->
+        </tbody>
+    </table>
+
+    <div style="text-align: center;">
+        <button class="btn-primary" onclick="calculateTransformation()"><b>= Calculate Transformation Matrix</b></button>
+    </div>
+
+    <div id="outputArea"></div>
+
+    <footer>
+        made by <a href="https://www.linkedin.com/in/shaker-abdullah-94bab5299/">Shaker abdullah<a/> &copy; 2026
+    </footer>
+
+    <script>
+        // --- 0. THEME LOGIC ---
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.getElementById('themeBtn');
+            if (document.body.classList.contains('dark-mode')) {
+                btn.textContent = '☀️';
+            } else {
+                btn.textContent = '🌙';
+            }
+        }
+
+        // --- 1. SYMBOLIC MATH ENGINE ---
+        const Sym = {
+            isZero: (val) => val === 0 || val === "0" || val === -0,
+            isOne: (val) => val === 1 || val === "1",
+            parseExpression: (expr) => {
+                const str = String(expr).replace(/\s+/g, '');
+                const match = str.match(/^([a-zA-Z_θ][a-zA-Z0-9_θ]*)([+-])(\d+(?:\.\d+)?)$/);
+                if (match) {
+                    const term = match[1];
+                    const op = match[2];
+                    let val = parseFloat(match[3]);
+                    if (op === '-') val = -val;
+                    return { term, offset: val };
+                }
+                return { term: str, offset: 0 };
+            },
+            formatSymbol: (funcType, val) => {
+                const thetaMatch = String(val).match(/^(?:theta|q|t|θ)_?(\d+)$/i);
+                const sub = thetaMatch ? `<sub>${thetaMatch[1]}</sub>` : `(${val})`;
+                return (funcType === 'cos' ? 'C' : 'S') + sub;
+            },
+            mult: (a, b) => {
+                if (Sym.isZero(a) || Sym.isZero(b)) return 0;
+                if (Sym.isOne(a)) return b;
+                if (Sym.isOne(b)) return a;
+                if (a === -1) return Sym.negate(b);
+                if (b === -1) return Sym.negate(a);
+                const numA = parseFloat(a);
+                const numB = parseFloat(b);
+                if (!isNaN(numA) && !isNaN(numB)) return numA * numB;
+                const strA = (typeof a === 'string' && (a.includes('+') || a.includes('-')) && !a.startsWith('-')) ? `(${a})` : a;
+                const strB = (typeof b === 'string' && (b.includes('+') || b.includes('-')) && !b.startsWith('-')) ? `(${b})` : b;
+                return `${strA}*${strB}`;
+            },
+            add: (a, b) => {
+                if (Sym.isZero(a)) return b;
+                if (Sym.isZero(b)) return a;
+                const numA = parseFloat(a);
+                const numB = parseFloat(b);
+                if (!isNaN(numA) && !isNaN(numB)) return numA + numB;
+                return `${a} + ${b}`;
+            },
+            negate: (val) => {
+                if (Sym.isZero(val)) return 0;
+                if (!isNaN(val)) return -val;
+                if (typeof val === 'string' && val.startsWith('-')) return val.substring(1);
+                return `-${val}`;
+            },
+            cos: (val) => {
+                if (!val && val !== 0) return 1;
+                const num = parseFloat(val);
+                if (!isNaN(num)) {
+                    const rad = num * (Math.PI / 180);
+                    let res = Math.cos(rad);
+                    if (Math.abs(res) < 1e-10) res = 0;
+                    if (Math.abs(res - 1) < 1e-10) res = 1;
+                    if (Math.abs(res + 1) < 1e-10) res = -1;
+                    return res;
+                }
+                const { term, offset } = Sym.parseExpression(val);
+                let shift = offset % 360;
+                if (shift < 0) shift += 360;
+                if (Math.abs(shift) < 1e-5) return Sym.formatSymbol('cos', term);
+                if (Math.abs(shift - 90) < 1e-5) return Sym.negate(Sym.formatSymbol('sin', term));
+                if (Math.abs(shift - 180) < 1e-5) return Sym.negate(Sym.formatSymbol('cos', term));
+                if (Math.abs(shift - 270) < 1e-5) return Sym.formatSymbol('sin', term);
+                return `C(${val})`;
+            },
+            sin: (val) => {
+                if (!val && val !== 0) return 0;
+                const num = parseFloat(val);
+                if (!isNaN(num)) {
+                    const rad = num * (Math.PI / 180);
+                    let res = Math.sin(rad);
+                    if (Math.abs(res) < 1e-10) res = 0;
+                    if (Math.abs(res - 1) < 1e-10) res = 1;
+                    if (Math.abs(res + 1) < 1e-10) res = -1;
+                    return res;
+                }
+                const { term, offset } = Sym.parseExpression(val);
+                let shift = offset % 360;
+                if (shift < 0) shift += 360;
+                if (Math.abs(shift) < 1e-5) return Sym.formatSymbol('sin', term);
+                if (Math.abs(shift - 90) < 1e-5) return Sym.formatSymbol('cos', term);
+                if (Math.abs(shift - 180) < 1e-5) return Sym.negate(Sym.formatSymbol('sin', term));
+                if (Math.abs(shift - 270) < 1e-5) return Sym.negate(Sym.formatSymbol('cos', term));
+                return `S(${val})`;
+            }
+        };
+
+        // --- 2. MATRIX LOGIC ---
+        function createIdentityMatrix() {
+            return [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+        }
+
+        function getDHMatrix(theta, d, a, alpha) {
+            const cT = Sym.cos(theta);
+            const sT = Sym.sin(theta);
+            const cA = Sym.cos(alpha);
+            const sA = Sym.sin(alpha);
+            return [
+                [cT, Sym.negate(Sym.mult(sT, cA)), Sym.mult(sT, sA), Sym.mult(a, cT)],
+                [sT, Sym.mult(cT, cA), Sym.negate(Sym.mult(cT, sA)), Sym.mult(a, sT)],
+                [0, sA, cA, d || 0],
+                [0, 0, 0, 1]
+            ];
+        }
+
+        function multiplyMatrices(m1, m2) {
+            let result = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+            for(let row = 0; row < 4; row++) {
+                for(let col = 0; col < 4; col++) {
+                    let sum = 0;
+                    for(let k = 0; k < 4; k++) {
+                        sum = Sym.add(sum, Sym.mult(m1[row][k], m2[k][col]));
+                    }
+                    result[row][col] = sum;
+                }
+            }
+            return result;
+        }
+
+        // --- 3. UI HANDLING ---
+        let rowCount = 0;
+
+        function addRow() {
+            rowCount++;
+            const tbody = document.getElementById('tableBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${rowCount}</td>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="input-theta" placeholder="θ${rowCount}*">
+                        <button class="btn-mini" onclick="insertTheta(this)" title="Insert theta${rowCount}">θ</button>
+                    </div>
+                </td>
+                <td><input type="text" class="input-d" placeholder="d${rowCount}*"></td>
+                <td><input type="text" class="input-a" placeholder="a${rowCount}"></td>
+                <td><input type="text" class="input-alpha" placeholder="α°"></td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function removeRow() {
+            if (rowCount > 0) {
+                const tbody = document.getElementById('tableBody');
+                tbody.removeChild(tbody.lastElementChild);
+                rowCount--;
+            }
+        }
+        
+        function clearTable() {
+            const inputs = document.querySelectorAll('#dhTable input');
+            inputs.forEach(input => input.value = '');
+            document.getElementById('outputArea').innerHTML = '';
+        }
+
+        function insertTheta(btn) {
+            const row = btn.closest('tr');
+            const jointNum = row.cells[0].textContent;
+            const input = btn.previousElementSibling;
+            input.value = "theta" + jointNum;
+            input.focus();
+        }
+
+        window.onload = function() {
+            addRow(); addRow(); addRow();
+        };
+
+        function renderMatrix(matrix, title) {
+            const container = document.getElementById('outputArea');
+            const wrapper = document.createElement('div');
+            wrapper.className = 'matrix-container';
+
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'matrix-title';
+            titleDiv.innerHTML = title;
+            wrapper.appendChild(titleDiv);
+
+            const grid = document.createElement('div');
+            grid.className = 'matrix-display';
+
+            for (let i = 0; i < 4; i++) {
+                for (let j = 0; j < 4; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'matrix-cell';
+                    cell.innerHTML = matrix[i][j];
+                    grid.appendChild(cell);
+                }
+            }
+            wrapper.appendChild(grid);
+            container.appendChild(wrapper);
+        }
+
+        function calculateTransformation() {
+            const outputArea = document.getElementById('outputArea');
+            outputArea.innerHTML = '';
+            const rows = document.querySelectorAll('#tableBody tr');
+            let T_Accumulated = createIdentityMatrix();
+
+            rows.forEach((row, index) => {
+                const theta = row.querySelector('.input-theta').value.trim();
+                const d = row.querySelector('.input-d').value.trim();
+                const a = row.querySelector('.input-a').value.trim();
+                const alpha = row.querySelector('.input-alpha').value.trim();
+                const T_Current = getDHMatrix(theta, d, a, alpha);
+                
+                // Notation: T with index in superscript and index+1 in subscript
+                renderMatrix(T_Current, `T<sup>${index}</sup><sub>${index+1}</sub> =`);
+                T_Accumulated = multiplyMatrices(T_Accumulated, T_Current);
+            });
+
+            renderMatrix(T_Accumulated, `T<sup>0</sup><sub>${rows.length}</sub> =`);
+        }
+    </script>
+</body>
+</html>
