@@ -1,7 +1,7 @@
 # Classic-DH-Table-Matrix-Calculator
 A web-based tool designed for roboticists, engineers, and students to compute individual and global transformation matrices for serial manipulators using the Standard Denavit-Hartenberg (DH) convention.
 
-![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/[branch]/image.jpg?raw=true)
+![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/Classic%20DH%20Table%20Matrix%20Calculator.png?raw=true)
 ## Features
 Symbolic Computation: Handles variables (e.g., theta1, L1, d2) and preserves them in the final matrix output.
 Trigonometric Simplification: Automatically applies identities for phase shifts (e.g., cos($\theta$ - 90) simplifies to S₁).
