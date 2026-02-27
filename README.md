@@ -11,7 +11,7 @@ $$Rot_{z}(\theta) \cdot Trans_{z}(d) \cdot Trans_{x}(a) \cdot Rot_{x}(\alpha)$$
 Dynamic Joints: Add or remove joint rows as needed for your specific kinematic chain.
 Dark Mode: Toggle between light and dark themes for better visibility.
 Standard Notation: Outputs results using $C_i$ and $S_i$ notation with proper subscripts and superscripts ($T^{i-1}_{i}$).
-##Added 3D model Visualization
+# Added 3D model Visualization
 ![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/3D%20model.gif?raw=true)
 ### The matrix
 ![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/The%20Matrix.png?raw=true)
