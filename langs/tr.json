@@ -1,0 +1,19 @@
+{
+    "title": "Klasik DH Tablosu Matris Hesaplayıcı",
+    "subtitle": "<strong>Standart DH Kuralı</strong> (Rot<sub>z,θ</sub> &rarr; Trans<sub>z,d</sub> &rarr; Trans<sub>x,a</sub> &rarr; Rot<sub>x,α</sub>)<br>Çarpım Sırası: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub> <br>[ Not: sin(θ<sub>1</sub>) => S<sub>1</sub> olarak, cos(θ<sub>1</sub>) => C<sub>1</sub> olarak gösterilir ]",
+    "btn-remove": "<b>- Eklem Sil</b>",
+    "btn-add": "<b>+ Eklem Ekle</b>",
+    "btn-clear": "<b>🗑️ Temizle</b>",
+    "th-joint": "Eklem",
+    "th-theta": "θ (teta)",
+    "th-d": "d",
+    "th-a": "a",
+    "th-alpha": "α (alfa)",
+    "btn-calc": "<b>= Matrisi Hesapla & 3D Güncelle</b>",
+    "made-by": "yapan <a href=\"https://www.linkedin.com/in/shaker-abdullah-94bab5299/\">Shaker abdullah</a> &copy; 2026",
+    "lang-btn": "EN",
+    "ph-theta": "θ",
+    "ph-d": "d",
+    "ph-a": "a",
+    "ph-alpha": "α°"
+}

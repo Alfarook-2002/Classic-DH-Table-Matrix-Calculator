@@ -1,0 +1,19 @@
+{
+    "title": "حاسبة مصفوفة جدول DH الكلاسيكية",
+    "subtitle": "<strong>ترتيب جدول  DH القياسي</strong> (دورانz,θ &rarr; انتقالz,d &rarr; إزاحةx,a &rarr; دورانx,α)<br>ترتيب الضرب: <span dir=\"ltr\">T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub></span> <br><span dir=\"ltr\">[  S<sub>1</sub> كـ sin(θ<sub>1</sub>), C<sub>1</sub> كـ cos(θ<sub>1</sub>) ملاحظة : تعرض]</span>",
+    "btn-remove": "<b>- إزالة مفصل</b>",
+    "btn-add": "<b>+ إضافة مفصل</b>",
+    "btn-clear": "<b>🗑️ مسح</b>",
+    "th-joint": "المفصل",
+    "th-theta": "θ (ثيتا)",
+    "th-d": "d (المسافة)",
+    "th-a": "a (الطول)",
+    "th-alpha": "α (ألفا)",
+    "btn-calc": "<b>= حساب المصفوفة وتحديث 3D</b>",
+    "made-by": "صنع بواسطة <a href=\"https://www.linkedin.com/in/shaker-abdullah-94bab5299/\">شاكر عبدالله</a> &copy; 2026",
+    "lang-btn": "En",
+    "ph-theta": "θ",
+    "ph-d": "d",
+    "ph-a": "a",
+    "ph-alpha": "°α"
+}

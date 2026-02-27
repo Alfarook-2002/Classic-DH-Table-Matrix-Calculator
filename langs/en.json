@@ -1,0 +1,19 @@
+{
+    "title": "Classic DH Table Matrix Calculator",
+    "subtitle": "<strong>Standard DH Convention Order</strong> (Rot<sub>z,θ</sub> &rarr; Trans<sub>z,d</sub> &rarr; Trans<sub>x,a</sub> &rarr; Rot<sub>x,α</sub>)<br>Order of Multiplication: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub> <br>[ Note: we Write sin(θ<sub>1</sub>)  as S<sub>1</sub>, cos(θ<sub>1</sub>) as C<sub>1</sub> ]",
+    "btn-remove": "<b>- Remove Joint</b>",
+    "btn-add": "<b>+ Add Joint</b>",
+    "btn-clear": "<b>🗑️ clear</b>",
+    "th-joint": "Joint",
+    "th-theta": "θ (theta)",
+    "th-d": "d",
+    "th-a": "a",
+    "th-alpha": "α (alpha)",
+    "btn-calc": "<b>= Calculate Matrix & Update 3D</b>",
+    "made-by": "made by <a href=\"https://www.linkedin.com/in/shaker-abdullah-94bab5299/\">Shaker abdullah</a> &copy; 2026",
+    "lang-btn": "ع",
+    "ph-theta": "θ",
+    "ph-d": "d",
+    "ph-a": "a",
+    "ph-alpha": "α°"
+}
