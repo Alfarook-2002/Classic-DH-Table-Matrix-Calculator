@@ -40,10 +40,92 @@
             position: relative;
             transition: background-color 0.3s, color 0.3s;
         }
+       h1 { 
+            color: var(--text-main); 
+            text-align: center; 
+            margin-top: 60px; /* Pushes the title down so buttons don't overlap */
+            margin-bottom: 5px; 
+            padding: 0 20px; /* Prevents text from touching edges on small screens */
+        }        .subtitle { text-align: center; color: var(--text-muted); font-size: 1.2em; margin-bottom: 25px; }
 
-        h1 { color: var(--text-main); text-align: center; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: var(--text-muted); font-size: 1.2em; margin-bottom: 25px; }
+        /* --- Custom Language Dropdown --- */
+        .custom-dropdown {
+            position: absolute; top: 20px; right: 70px; /* STAYS HERE FOREVER */
+            z-index: 100; 
+            width: 115px; 
+        }
+        
+        .dropdown-btn {
+            background: var(--surface); border: 1px solid var(--border); color: var(--text-main); 
+            height: 40px; border-radius: 20px; cursor: pointer; font-size: 14px;
+            padding: 0 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            transition: all 0.3s ease; /* Smoother button transition */
+            font-weight: bold;
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; 
+        }
+        
+        .dropdown-btn:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
 
+        /* When OPEN: flatten bottom corners */
+        .custom-dropdown.active .dropdown-btn { 
+            border-radius: 16px 16px 0 0; 
+            border-bottom-color: transparent; 
+            box-shadow: none;
+        }
+
+        /* The Attached List with Smooth Slide Animation */
+        .dropdown-menu {
+            position: absolute; 
+            top: 39px; 
+            left: 0; right: 0; 
+            background: var(--surface); border: 1px solid var(--border); 
+            border-top: none; 
+            border-radius: 0 0 16px 16px; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            list-style: none; padding: 0 0 5px 0; margin: 0; 
+            flex-direction: column; overflow: hidden;
+            
+            /* Animation Properties instead of display: none */
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px); /* Starts slightly pushed up */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Buttery smooth easing curve */
+            pointer-events: none; /* Stops accidental clicks when invisible */
+        }
+        
+        /* The Active Animation State */
+        .custom-dropdown.active .dropdown-menu { 
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0); /* Slides down into place */
+            pointer-events: auto;
+        } 
+        
+        .dropdown-menu li {
+            padding: 10px 15px; cursor: pointer; color: var(--text-main); 
+            font-size: 14px; transition: background 0.2s, color 0.2s; text-align: left;
+        }
+        
+        .dropdown-menu li:hover { 
+            background: var(--th-bg); color: var(--primary); font-weight: bold;
+        }
+
+        /* RTL Layout Flips - ONLY FLIP THE TEXT ALIGNMENT, NOTHING ELSE */
+        html[dir="rtl"] .dropdown-menu li { text-align: right; }
+
+
+        /* --- RTL Layout Adjustments --- */
+        html[dir="rtl"] .matrix-display { direction: ltr; } /* Keep math output LTR */
+        
+        /* Force table inputs to stay Left-to-Right. 
+           This prevents the '*' from jumping, keeps text perfectly centered, 
+           and stops the 'θ' button from flipping to the left side! */
+        html[dir="rtl"] .input-group,
+        html[dir="rtl"] input { 
+            direction: ltr; 
+        }
         .theme-toggle {
             position: absolute; top: 20px; right: 20px; background: var(--surface);
             border: 1px solid var(--border); color: var(--text-main); width: 40px;
@@ -63,6 +145,15 @@
         th { background-color: var(--th-bg); padding: 12px; text-align: center; font-weight: 600; border-bottom: 1px solid var(--border); }
         td { padding: 8px; text-align: center; border-bottom: 1px solid var(--border); }
 
+        /* Vacuum seal the first column around the numbers */
+        #dhTable th:first-child,
+        #dhTable td:first-child {
+            width: 1% !important; 
+            white-space: nowrap; 
+            padding-left: 2px !important;  /* Kill the dead space */
+            padding-right: 2px !important; /* Kill the dead space */
+            font-weight: bold;
+        }
         input {
             padding: 8px; width: 100%; border: 1px solid var(--border);
             background-color: var(--input-bg); color: var(--text-main);
@@ -98,10 +189,10 @@
             top: 50%;
             right: 15px;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(54, 50, 50, 0.697);
             padding: 15px;
             border-radius: 20px;
-            color: white;
+            color: rgb(255, 255, 255);
             display: flex;
             flex-direction: row;
             gap: 20px;
@@ -120,6 +211,7 @@
             line-height: 24px;
             margin-bottom: 12px; /* Uniform gap before the slider starts */
             display: block;
+            
             text-align: center;
             font-size: 16px;
             font-weight: bold;
@@ -130,7 +222,7 @@
             appearance: none;
             width: 6px;
             height: 200px;
-            background: #444;
+            background: #26444abb;
             border-radius: 3px;
             writing-mode: vertical-lr;
             direction: rtl;
@@ -182,7 +274,7 @@
             appearance: none;
             width: 26px;
             height: 26px;
-            background-color: var(--primary);
+            background-color: #565b61;
             border-radius: 50%;
             cursor: ns-resize;
             /* Properly URL-encoded SVG for the ⇕ symbol */
@@ -254,14 +346,42 @@
             text-decoration-thickness: 2px;
             text-underline-offset: 4px;
         }
+        /* --- Mobile View Optimizations --- */
+        @media (max-width: 600px) {
+            /* Shrink table padding and text size */
+            th, td { padding: 4px 1px !important; font-size: 13px; }
+            
+            /* Shrink the theta button */
+            .btn-mini { padding: 4px 5px; min-width: 26px; font-size: 12px; }
+            
+            /* Squeeze the gap between the theta input and the button */
+            .input-group { gap: 2px; }
+            
+            /* Absolutely lock the Joint column width */
+            #dhTable th:first-child, 
+            #dhTable td:first-child { 
+                width: 25px !important; 
+            }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body class="dark-mode">
 
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme">☀️</button>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme"></button>
 
+    <div class="custom-dropdown" id="langDropdown">
+        <button class="dropdown-btn" onclick="toggleLangMenu()">
+            <span id="currentLangText">English</span>
+            <span style="font-size: 10px; opacity: 0.6;">▼</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li onclick="selectLang('en', 'English')">English</li>
+            <li onclick="selectLang('ar', 'العربية')">العربية</li>
+            <li onclick="selectLang('tr', 'Türkçe')">Türkçe</li>
+        </ul>
+    </div>
     <h1>Classic DH Table Matrix Calculator</h1>
     <div class="subtitle">
         <strong>Standard DH Convention</strong> (Rot<sub>z,θ</sub> &rarr; Trans<sub>z,d</sub> &rarr; Trans<sub>x,a</sub> &rarr; Rot<sub>x,α</sub>)<br>
@@ -277,7 +397,7 @@
     <table id="dhTable">
         <thead>
             <tr>
-                <th style="width: 60px;">Joint</th>
+                <th>Joint</th>
                 <th>θ (theta)</th>
                 <th>d</th>
                 <th>a</th>
@@ -313,12 +433,78 @@
 
     <script>
         // --- 0. THEME LOGIC ---
+        // --- 0. THEME LOGIC ---
+        const sunSVG = `<svg viewBox="0 0 898 910" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path fill="#FFA50D" d="M 617.889 235.712 C 619.248 235.134 679.202 216.709 707.484 207.987 C 735.292 199.412 763.069 190.734 790.868 182.126 C 791.107 182.052 791.453 182.323 792.302 182.638 C 788.639 189.176 785.096 195.668 781.395 202.07 C 774.328 214.294 767.154 226.456 760.057 238.663 C 749.541 256.753 739.018 274.839 728.564 292.964 C 720.539 306.878 702.461 336.916 701.368 337.976 C 700.41 336.979 676.873 295.883 662.194 279.106 C 650.493 265.731 620.131 237.826 617.889 235.712 Z"/><path fill="#FFA50D" d="M 191.21 337.691 C 190.491 337.907 101.752 184.985 99.925 181.514 C 113.094 185.659 272.434 235.427 272.564 236.3 C 272.708 237.259 271.838 238.739 270.964 239.425 C 244.356 260.311 223.018 285.827 205.299 314.455 C 201.378 320.79 192.662 337.255 191.21 337.691 Z"/><path fill="#FFA50D" d="M 171.998 516.94 C 175.986 530.519 176.046 535.026 179.234 542.464 C 179.838 543.874 194.631 581.985 195.357 583.984 C 134.967 574.859 75.297 565.842 14.12 556.598 C 65 521.873 114.982 487.761 166 452.942 C 166 460.282 168.624 487.117 169.297 493.105 C 170.954 507.843 169.993 501.809 171.998 516.94 Z"/><path fill="#FFA50D" d="M 878.475 556.459 C 868.131 558.131 700.281 583.644 697.083 584.196 C 717.409 542.637 727.435 499.623 727.085 453.215 C 777.596 487.662 827.388 521.619 878.475 556.459 Z"/><path fill="#FFA50D" d="M 624.382 675.221 C 625.841 689.784 637.041 852.157 636.293 854.682 C 630.583 849.747 503.373 735.354 506.266 734.908 C 513.438 733.802 539.995 722.257 553.994 716.849 C 573.89 709.163 592.294 698.498 609.552 685.93 C 614.42 682.385 619.189 678.704 624.382 675.221 Z"/><path fill="#FFA50D" d="M 379.365 185.514 C 382.565 177.094 447.073 17.823 447.574 17.776 C 469.393 73.249 491.211 128.723 513.526 185.461 C 468.605 174.677 424.36 174.521 379.365 185.514 Z"/><path fill="#FFA50D" d="M 255.167 851.999 C 256.099 838.227 266.542 687.946 267.054 682.706 C 267.49 678.237 269.853 676.906 273.659 679.363 C 282.251 684.909 290.462 691.051 299.093 696.533 C 322.388 711.326 347.49 722.032 374.184 729.02 C 376.214 729.551 378.157 730.413 380.186 730.947 C 385.151 732.254 386.01 734.579 382.323 738.107 C 371.688 748.282 256.214 852.01 255.167 851.999 Z"/><path fill="#FFA50D" d="M 637.873 59.067 C 637.564 66.102 627.032 180.145 625.654 180.581 C 609 185.849 592.249 190.809 575.594 196.074 C 572.491 197.055 558.281 161.366 551.709 145.526 C 550.234 141.97 634.662 61.736 637.873 59.067 Z"/><path fill="#FFA50D" d="M 775.68 425.403 C 771.518 422.334 739.947 401.163 728.893 393.476 C 737.813 377.878 747.385 362.979 755.312 347.199 C 758.71 340.435 758.726 340.405 768.598 342.184 C 778.682 344.001 872.091 358.769 875.311 359.653 C 875.252 360.215 798.876 413.2 781.156 425.541 C 778.863 427.138 777.763 426.94 775.68 425.403 Z"/><path fill="#FFA50D" d="M 213.191 699.842 C 203.748 702.69 129.15 725.546 100.252 734.544 C 103.33 728.714 152.994 642.82 158.323 632.987 C 160.14 629.634 219.414 640.332 219.042 644.675 C 217.934 657.605 213.992 699.601 213.191 699.842 Z"/><path fill="#FFA50D" d="M 448.235 750.674 C 449.692 751.44 489.58 789.137 488.247 792.601 C 480.001 814.021 447.994 895.577 445.821 899.239 C 440.725 886.278 404.916 796.411 403.364 791.488 C 402.885 789.968 446.299 750.762 448.235 750.674 Z"/><path fill="#FFA50D" d="M 729.445 629.997 C 732.928 629.46 789.248 729.791 788.958 730.454 C 786.275 730.454 683.976 700.634 677.323 698.663 C 676.888 692.073 674.166 656.043 672.981 644.789 C 672.426 639.519 673.11 638.639 678.288 637.935 C 687.961 636.618 722.04 631.138 729.445 629.997 Z"/><path fill="#FFA50D" d="M 255.487 64.461 C 256.999 63.979 326.038 125.588 339.428 137.865 C 341.788 140.028 327.45 179.726 320.652 197.049 C 302.268 191.314 284.199 185.741 266.205 179.938 C 264.866 179.506 255.681 74.939 255.487 64.461 Z"/><path fill="#FFA50D" d=" M23.000378,358.166656 C35.692173,356.127472 48.364838,353.958588 61.080788,352.083160 C75.761711,349.917908 90.486336,348.050537 105.181252,345.977844 C114.050179,344.726868 122.897316,343.321869 131.758728,342.016602 C132.568558,341.897339 133.411179,342.000732 134.264755,342.000732 C144.169525,359.213165 154.019638,376.330597 164.004562,393.682281 C150.876694,402.498505 137.805222,411.251068 124.761398,420.044617 C113.984100,427.310150 113.993790,427.338684 103.265862,420.041260 C80.585014,404.613098 57.909657,389.176910 35.052948,373.113922 C33.901249,372.026672 32.928650,371.569519 31.956059,371.112366 C31.369900,370.967407 30.783735,370.822479 30.066010,370.033966 C28.443577,367.812134 27.107149,366.039246 25.423693,364.703735 C23.197273,362.937531 21.599295,361.172363 23.000378,358.166656 z"/><path fill="#FFA50D" d=" M22.608723,358.102661 C21.599295,361.172363 23.197273,362.937531 25.423693,364.703735 C27.107149,366.039246 28.443577,367.812134 29.946033,369.752258 C24.998747,366.827789 20.039871,363.541473 14.272893,359.719635 C17.708706,358.992645 19.962887,358.515656 22.608723,358.102661 z"/><path fill="#FFA50D" d=" M32.078506,371.411926 C32.928650,371.569519 33.901249,372.026672 34.915924,372.799377 C34.038994,372.647156 33.119976,372.179321 32.078506,371.411926 z"/><ellipse fill="#FED501" cx="446.803" cy="461.539" rx="230.009" ry="227.373"/></svg>`;
+        const moonSVG = `<svg viewBox="0 0 36 36" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path fill="#FFCC4D" d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z"/></svg>`;
+
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const btn = document.getElementById('themeBtn');
-            btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+            btn.innerHTML = document.body.classList.contains('dark-mode') ? sunSVG : moonSVG;
+        }
+        let currentLang = 'en';
+        let translations = {};
+
+        async function loadLanguage(lang) {
+            try {
+                // Pointing directly to the new langs folder
+                const response = await fetch(`langs/${lang}.json`);
+                translations = await response.json();
+                applyTranslations();
+            } catch (error) {
+                console.error("Error loading language file:", error);
+            }
         }
 
+        // --- CUSTOM DROPDOWN LOGIC ---
+        function toggleLangMenu() {
+            document.getElementById('langDropdown').classList.toggle('active');
+        }
+
+        function selectLang(langCode, langName) {
+            currentLang = langCode;
+            document.getElementById('currentLangText').textContent = langName;
+            loadLanguage(currentLang);
+            document.getElementById('langDropdown').classList.remove('active');
+        }
+
+        // Close the dropdown if the user clicks anywhere else on the screen
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('langDropdown');
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function applyTranslations() {
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Text Elements
+            document.querySelector('h1').innerHTML = translations['title'] || 'Classic DH Table Matrix Calculator';
+            document.querySelector('.subtitle').innerHTML = translations['subtitle'] || '';
+            document.querySelector('.btn-danger').innerHTML = translations['btn-remove'] || '<b>- Remove Joint</b>';
+            document.querySelector('.btn-secondary').innerHTML = translations['btn-add'] || '<b>+ Add Joint</b>';
+            document.querySelector('.btn-outline').innerHTML = translations['btn-clear'] || '<b>🗑️ clear</b>';
+            document.querySelector('.btn-primary').innerHTML = translations['btn-calc'] || '<b>= Calculate Matrix & Update 3D</b>';
+            document.querySelector('footer').innerHTML = translations['made-by'] || '';
+  
+
+            // Table Headers
+            const ths = document.querySelectorAll('#dhTable th');
+            if (ths.length > 4) {
+                ths[0].innerHTML = translations['th-joint'] || 'Joint';
+                ths[1].innerHTML = translations['th-theta'] || 'θ (theta)';
+                ths[2].innerHTML = translations['th-d'] || 'd';
+                ths[3].innerHTML = translations['th-a'] || 'a';
+                ths[4].innerHTML = translations['th-alpha'] || 'α (alpha)';
+            }
+
+            // Update placeholders
+            document.querySelectorAll('.input-theta').forEach((el, i) => el.placeholder = `${translations['ph-theta'] || 'θ'}${i+1}*`);
+            document.querySelectorAll('.input-d').forEach((el, i) => el.placeholder = `${translations['ph-d'] || 'd'}${i+1}*`);
+            document.querySelectorAll('.input-a').forEach((el, i) => el.placeholder = `${translations['ph-a'] || 'a'}${i+1}`);
+            document.querySelectorAll('.input-alpha').forEach(el => el.placeholder = translations['ph-alpha'] || 'α°');
+        }
         // --- 1. SYMBOLIC MATH ENGINE ---
         const Sym = {
             isZero: (val) => val === 0 || val === "0" || val === -0 || val === "",
@@ -431,13 +617,18 @@
             const tbody = document.getElementById('tableBody');
             const tr = document.createElement('tr');
             // Rule 2: Start with entirely empty inputs
+            const pTheta = translations['ph-theta'] || 'θ';
+            const pD = translations['ph-d'] || 'd';
+            const pA = translations['ph-a'] || 'a';
+            const pAlpha = translations['ph-alpha'] || 'α°';
+
             tr.innerHTML = `
                 <td>${rowCount}</td>
-                <td><div class="input-group"><input type="text" class="input-theta" placeholder="θ${rowCount}*">
+                <td><div class="input-group"><input type="text" class="input-theta" placeholder="${pTheta}${rowCount}*">
                     <button class="btn-mini" onclick="insertTheta(this)">θ</button></div></td>
-                <td><input type="text" class="input-d" placeholder="d${rowCount}*"></td>
-                <td><input type="text" class="input-a" placeholder="a${rowCount}"></td>
-                <td><input type="text" class="input-alpha" placeholder="α°"></td>
+                <td><input type="text" class="input-d" placeholder="${pD}${rowCount}*"></td>
+                <td><input type="text" class="input-a" placeholder="${pA}${rowCount}"></td>
+                <td><input type="text" class="input-alpha" placeholder="${pAlpha}"></td>
             `;
             tbody.appendChild(tr);
             if(robotBase) build3DRobot(); 
@@ -454,6 +645,10 @@
         
         function clearTable() {
             document.querySelectorAll('#dhTable input').forEach(input => input.value = '');
+            
+            // Bring all the hidden theta buttons back
+            document.querySelectorAll('.btn-mini').forEach(btn => btn.style.display = 'block'); 
+            
             document.getElementById('outputArea').innerHTML = '';
             build3DRobot();
         }
@@ -461,6 +656,9 @@
         function insertTheta(btn) {
             const input = btn.previousElementSibling;
             input.value = "theta" + btn.closest('tr').cells[0].textContent;
+            
+            // UX Magic: Hide the button to give the input box more room!
+            btn.style.display = 'none'; 
         }
 
         function renderMatrix(matrix, title, isFinal = false) {
@@ -844,6 +1042,8 @@
         }
 
         window.onload = function() {
+            document.getElementById('themeBtn').innerHTML = document.body.classList.contains('dark-mode') ? sunSVG : moonSVG;
+            loadLanguage('en'); // Loads the English JSON immediately
             init3D();
             addRow(); addRow(); addRow(); 
             build3DRobot();
