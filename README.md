@@ -2,7 +2,7 @@
 A web-based tool designed for roboticists, engineers, and students to compute individual and global transformation matrices for serial manipulators using the Standard Denavit-Hartenberg (DH) convention.**[🔗 link](https://alfarook-2002.github.io/Classic-DH-Table-Matrix-Calculator/)**
 
 
-![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/Classic%20DH%20Table%20Matrix%20Calculator.png?raw=true)
+![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/Classic%20DH%20Table%20Matrix%20Calculator.png?raw=true)
 ## Features
 Symbolic Computation: Handles variables (e.g., theta1, L1, d2) and preserves them in the final matrix output.
 Trigonometric Simplification: Automatically applies identities for phase shifts (e.g., cos($\theta$ - 90) simplifies to S₁).
@@ -12,9 +12,9 @@ Dynamic Joints: Add or remove joint rows as needed for your specific kinematic c
 Dark Mode: Toggle between light and dark themes for better visibility.
 Standard Notation: Outputs results using $C_i$ and $S_i$ notation with proper subscripts and superscripts ($T^{i-1}_{i}$).
 #Added 3D model Visualization
-![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/3D%20model.gif?raw=true)
+![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/3D%20model.gif?raw=true)
 ### The matrix
-![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/The%20Matrix.png?raw=true)
+![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/The%20Matrix.png?raw=true)
 ## How to Use
 - Enter Parameters: Fill in the $\theta$, $d$, $a$, and $\alpha$ values for each joint.
 - Use numbers for constants (e.g., 90, 0).
