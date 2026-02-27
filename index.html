@@ -230,7 +230,30 @@
             box-shadow: 0 8px 15px rgba(59, 130, 246, 0.2);
             background: rgba(23, 43, 75, 0.05);
         }
-        footer { margin-top: 50px; padding: 20px; text-align: center; color: var(--text-muted); border-top: 1px solid var(--border); font-size: 0.9em; }
+        /* --- Footer Styles --- */
+        footer { 
+            margin-top: 50px; 
+            padding: 30px 20px; 
+            text-align: center; 
+            color: var(--text-muted); 
+            border-top: 1px solid var(--border); 
+            font-size: 0.95em; 
+            letter-spacing: 0.5px;
+        }
+
+        footer a, footer a:visited, footer a:active {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-main);
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -242,7 +265,7 @@
     <h1>Classic DH Table Matrix Calculator</h1>
     <div class="subtitle">
         <strong>Standard DH Convention</strong> (Rot<sub>z,θ</sub> &rarr; Trans<sub>z,d</sub> &rarr; Trans<sub>x,a</sub> &rarr; Rot<sub>x,α</sub>)<br>
-        Order of Multiplication: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub>
+        Order of Multiplication: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub> <br>[  sin(θ<sub>1</sub>) as S<sub>1</sub>, cos(θ<sub>1</sub>) as C<sub>1</sub> ]
     </div>
 
     <div class="controls">
@@ -513,6 +536,8 @@
             scene.add(createXYZAxesHelper(4));
 
             controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
             const fixedTilt = Math.PI / 2.6; // ~81.8 degrees for a more top-down view
             controls.minPolarAngle = fixedTilt; 
             controls.maxPolarAngle = fixedTilt;
@@ -641,7 +666,21 @@
         }
 
         function build3DRobot() {
-            while(robotBase.children.length > 0) robotBase.remove(robotBase.children[0]);
+            // Clean up GPU memory before rebuilding
+            while(robotBase.children.length > 0) {
+                const child = robotBase.children[0];
+                robotBase.remove(child);
+                child.traverse((object) => {
+                    if (object.geometry) object.geometry.dispose();
+                    if (object.material) {
+                        if (Array.isArray(object.material)) {
+                            object.material.forEach(mat => mat.dispose());
+                        } else {
+                            object.material.dispose();
+                        }
+                    }
+                });
+            }
             
             let currentFrame = robotBase;
             const rows = document.querySelectorAll('#tableBody tr');
@@ -706,11 +745,23 @@
                 jointGroup.add(dhTransform);
 
                 // 3. User Parameters Length Links
+                // Helper function to create a "ball joint" sphere to smooth out corners
+                const createElbow = (colorHex) => new THREE.Mesh(
+                    new THREE.SphereGeometry(0.2, 16, 16), 
+                    new THREE.MeshPhongMaterial({ color: colorHex })
+                );
+
                 if (aData.length !== 0) {
                     const linkA = new THREE.CylinderGeometry(0.2, 0.2, Math.abs(aData.length), 16);
                     linkA.rotateZ(Math.PI / 2);
                     linkA.translate(aData.length / 2, 0, 0);
                     dhTransform.add(new THREE.Mesh(linkA, new THREE.MeshPhongMaterial({ color: 0xaaaaaa })));
+                    
+                    // Cap the end of the 'a' link
+                    const endSphereA = createElbow(0xaaaaaa);
+                    endSphereA.position.set(aData.length, 0, 0);
+                    dhTransform.add(endSphereA);
+
                     if (aData.isLetter) {
                         const lbl = createLabel(aData.label);
                         lbl.position.set(aData.length / 2, 0.8, 0); 
@@ -723,11 +774,19 @@
                     linkD.rotateX(Math.PI / 2);
                     linkD.translate(0, 0, dData.length / 2);
                     jointGroup.add(new THREE.Mesh(linkD, new THREE.MeshPhongMaterial({ color: 0x888888 })));
+                    
                     if (dData.isLetter) {
                         const lbl = createLabel(dData.label);
                         lbl.position.set(0.8, 0, dData.length / 2);
                         jointGroup.add(lbl);
                     }
+                }
+
+                // Add a primary ball bearing right at the intersection of D and A
+                if (aData.length !== 0 || dData.length !== 0) {
+                    const elbowSphere = createElbow(0x999999); 
+                    // Placed at the dhTransform origin (the exact corner where D ends and A begins)
+                    dhTransform.add(elbowSphere);
                 }
 
                 // Custom Local Frame at the structural joint
@@ -744,21 +803,6 @@
                     nextFrame.add(new THREE.Mesh(overlapGeo, overlapMat));
 
                     // Shift the starting point for the NEXT joint by +1 unit in Z
-                    const shiftedFrame = new THREE.Group();
-                    shiftedFrame.position.z = 1.5;
-                    nextFrame.add(shiftedFrame);
-                    currentFrame = shiftedFrame;
-                } else {
-                    currentFrame = nextFrame; // Proceed normally
-                } // Iterate standardly
-                // --- Prevent Joint Overlap (Distance 0) ---
-                if (aData.length === 0 && dData.length === 0) {
-                    const overlapGeo = new THREE.CylinderGeometry(0.15, 0.15, 1, 16);
-                    overlapGeo.rotateX(Math.PI / 2); 
-                    overlapGeo.translate(0, 0, 0.5); 
-                    const overlapMat = new THREE.MeshPhongMaterial({ color: 0x555555 });
-                    nextFrame.add(new THREE.Mesh(overlapGeo, overlapMat));
-
                     const shiftedFrame = new THREE.Group();
                     shiftedFrame.position.z = 1.5;
                     nextFrame.add(shiftedFrame);
