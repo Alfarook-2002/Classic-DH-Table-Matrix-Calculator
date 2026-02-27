@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DH Matrix Calculator</title>
-	<link
-	rel="icon"
-	type="image/svg+xml"
-	href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17.647 17.647'%3E%3Cg fill='%23f3f3f3'%3E%3Ccircle cx='2.648' cy='7.546' r='1.11'/%3E%3Cpath d='M5.296 7.546c0-1.46-1.188-2.648-2.648-2.648C1.189 4.898 0 6.086 0 7.546s1.188 2.648 2.648 2.648c1.46 0 2.648-1.188 2.648-2.648zm-2.648 2.021c-1.114 0-2.021-.906-2.021-2.021s.907-2.021 2.021-2.021c1.115 0 2.021.906 2.021 2.021s-.906 2.021-2.021 2.021z'/%3E%3Cpath d='M5.655 9.221c-.128.355-.331.689-.614.973-.306.305-.668.516-1.052.641l2.896 2.898h-.56v2.035h5.435v-2.035h-1.596L5.655 9.221z'/%3E%3Cpath d='M17.572 4.686c-.104-.104-.271-.107-.376-.004l-2.418 2.364-1.78-.934-.467-2.034 1.192-1.618 3.206 1.073a.282.282 0 00.337-.168.267.267 0 00-.166-.337l-3.391-1.135a.276.276 0 00-.298.094l-1.085 1.47-.895.205.126.548L5.294 5.648c.232.297.407.646.497 1.038.096.42.085.839-.014 1.232l6.298-1.447.126.548.953-.219 1.548.813a.27.27 0 00.31-.046l2.556-2.501a.265.265 0 00.004-.375z'/%3E%3C/g%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17.647 17.647'%3E%3Cg fill='%23f3f3f3'%3E%3Ccircle cx='2.648' cy='7.546' r='1.11'/%3E%3Cpath d='M5.296 7.546c0-1.46-1.188-2.648-2.648-2.648C1.189 4.898 0 6.086 0 7.546s1.188 2.648 2.648 2.648c1.46 0 2.648-1.188 2.648-2.648zm-2.648 2.021c-1.114 0-2.021-.906-2.021-2.021s.907-2.021 2.021-2.021c1.115 0 2.021.906 2.021 2.021s-.906 2.021-2.021 2.021z'/%3E%3Cpath d='M5.655 9.221c-.128.355-.331.689-.614.973-.306.305-.668.516-1.052.641l2.896 2.898h-.56v2.035h5.435v-2.035h-1.596L5.655 9.221z'/%3E%3Cpath d='M17.572 4.686c-.104-.104-.271-.107-.376-.004l-2.418 2.364-1.78-.934-.467-2.034 1.192-1.618 3.206 1.073a.282.282 0 00.337-.168.267.267 0 00-.166-.337l-3.391-1.135a.276.276 0 00-.298.094l-1.085 1.47-.895.205.126.548L5.294 5.648c.232.297.407.646.497 1.038.096.42.085.839-.014 1.232l6.298-1.447.126.548.953-.219 1.548.813a.27.27 0 00.31-.046l2.556-2.501a.265.265 0 00.004-.375z'/%3E%3C/g%3E%3C/svg%3E">
     <style>
         :root {
             --primary: #2563eb;
@@ -43,208 +40,364 @@
             position: relative;
             transition: background-color 0.3s, color 0.3s;
         }
+       h1 { 
+            color: var(--text-main); 
+            text-align: center; 
+            margin-top: 60px; /* Pushes the title down so buttons don't overlap */
+            margin-bottom: 5px; 
+            padding: 0 20px; /* Prevents text from touching edges on small screens */
+        }        .subtitle { text-align: center; color: var(--text-muted); font-size: 1.2em; margin-bottom: 25px; }
 
-        h1 {
-            color: var(--text-main);
-            text-align: center;
-            margin-bottom: 5px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: var(--text-muted);
-            font-size: 1.2em;
-            margin-bottom: 25px;
-        }
-
-        /* Dark Mode Button - Emoji Only */
-        .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-            padding: 0;
+        /* --- Custom Language Dropdown --- */
+        .custom-dropdown {
+            position: absolute; top: 20px; right: 70px; /* STAYS HERE FOREVER */
+            z-index: 100; 
+            width: 115px; 
         }
         
-        .theme-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        .dropdown-btn {
+            background: var(--surface); border: 1px solid var(--border); color: var(--text-main); 
+            height: 40px; border-radius: 20px; cursor: pointer; font-size: 14px;
+            padding: 0 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); 
+            transition: all 0.3s ease; /* Smoother button transition */
+            font-weight: bold;
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 100%; 
+        }
+        
+        .dropdown-btn:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        /* When OPEN: flatten bottom corners */
+        .custom-dropdown.active .dropdown-btn { 
+            border-radius: 16px 16px 0 0; 
+            border-bottom-color: transparent; 
+            box-shadow: none;
         }
 
-        .controls {
-            margin-bottom: 20px;
+        /* The Attached List with Smooth Slide Animation */
+        .dropdown-menu {
+            position: absolute; 
+            top: 39px; 
+            left: 0; right: 0; 
+            background: var(--surface); border: 1px solid var(--border); 
+            border-top: none; 
+            border-radius: 0 0 16px 16px; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            list-style: none; padding: 0 0 5px 0; margin: 0; 
+            flex-direction: column; overflow: hidden;
+            
+            /* Animation Properties instead of display: none */
             display: flex;
-            gap: 10px;
-            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px); /* Starts slightly pushed up */
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Buttery smooth easing curve */
+            pointer-events: none; /* Stops accidental clicks when invisible */
         }
+        
+        /* The Active Animation State */
+        .custom-dropdown.active .dropdown-menu { 
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0); /* Slides down into place */
+            pointer-events: auto;
+        } 
+        
+        .dropdown-menu li {
+            padding: 10px 15px; cursor: pointer; color: var(--text-main); 
+            font-size: 14px; transition: background 0.2s, color 0.2s; text-align: left;
+        }
+        
+        .dropdown-menu li:hover { 
+            background: var(--th-bg); color: var(--primary); font-weight: bold;
+        }
+
+        /* RTL Layout Flips - ONLY FLIP THE TEXT ALIGNMENT, NOTHING ELSE */
+        html[dir="rtl"] .dropdown-menu li { text-align: right; }
+
+
+        /* --- RTL Layout Adjustments --- */
+        html[dir="rtl"] .matrix-display { direction: ltr; } /* Keep math output LTR */
+        
+        /* Force table inputs to stay Left-to-Right. 
+           This prevents the '*' from jumping, keeps text perfectly centered, 
+           and stops the 'θ' button from flipping to the left side! */
+        html[dir="rtl"] .input-group,
+        html[dir="rtl"] input { 
+            direction: ltr; 
+        }
+        .theme-toggle {
+            position: absolute; top: 20px; right: 20px; background: var(--surface);
+            border: 1px solid var(--border); color: var(--text-main); width: 40px;
+            height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); transition: all 0.2s; padding: 0;
+        }
+        .theme-toggle:hover { transform: scale(1.1); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        .controls { margin-bottom: 20px; display: flex; gap: 10px; justify-content: center; }
 
         table {
-            width: 100%;
-            margin-bottom: 20px;
-            background: var(--surface);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid var(--border);
+            width: 100%; margin-bottom: 20px; background: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px;
+            overflow: hidden; border: 1px solid var(--border);
         }
+        th { background-color: var(--th-bg); padding: 12px; text-align: center; font-weight: 600; border-bottom: 1px solid var(--border); }
+        td { padding: 8px; text-align: center; border-bottom: 1px solid var(--border); }
 
-        th {
-            background-color: var(--th-bg);
-            padding: 12px;
-            text-align: center;
-            font-weight: 600;
-            color: var(--text-main);
-            border-bottom: 1px solid var(--border);
+        /* Vacuum seal the first column around the numbers */
+        #dhTable th:first-child,
+        #dhTable td:first-child {
+            width: 1% !important; 
+            white-space: nowrap; 
+            padding-left: 2px !important;  /* Kill the dead space */
+            padding-right: 2px !important; /* Kill the dead space */
+            font-weight: bold;
         }
-
-        td {
-            padding: 8px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-        }
-
         input {
-            padding: 8px;
-            width: 100%;
-            border: 1px solid var(--border);
-            background-color: var(--input-bg);
-            color: var(--text-main);
-            border-radius: 4px;
-            text-align: center;
-            font-size: 14px;
-            box-sizing: border-box;
+            padding: 8px; width: 100%; border: 1px solid var(--border);
+            background-color: var(--input-bg); color: var(--text-main);
+            border-radius: 4px; text-align: center; font-size: 14px; box-sizing: border-box;
         }
+        input:focus { outline: 2px solid var(--primary); border-color: transparent; }
 
-        input:focus {
-            outline: 2px solid var(--primary);
-            border-color: transparent;
-        }
+        .input-group { display: flex; align-items: center; gap: 5px; justify-content: center; }
 
-        .input-group {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            justify-content: center;
-        }
+        button { padding: 10px 20px; font-size: 14px; cursor: pointer; border: none; border-radius: 6px; transition: background 0.2s; font-weight: 500; }
+        .btn-mini { padding: 4px 10px; font-size: 14px; background: var(--th-bg); color: var(--text-main); border: 1px solid var(--border); min-width: 32px; }
+        .btn-mini:hover { background: var(--border); }
 
-        button {
-            padding: 10px 20px;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            border-radius: 6px;
-            transition: background 0.2s;
-            font-weight: 500;
-        }
-
-        .btn-mini {
-            padding: 4px 10px;
-            font-size: 14px;
-            background: var(--th-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            min-width: 32px;
-        }
-        .btn-mini:hover {
-            background: var(--border);
-        }
-
-        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary { background-color: var(--primary); color: white; width: 100%; max-width: 400px; margin: 10px 0; font-size: 1.1em;}
         .btn-primary:hover { opacity: 0.9; }
-        
         .btn-secondary { background-color: #64748b; color: white; }
         .btn-secondary:hover { background-color: #475569; }
-
         .btn-danger { background-color: #ef4444; color: white; }
         .btn-danger:hover { background-color: #dc2626; }
-
         .btn-outline { background-color: transparent; border: 1px solid var(--border); color: var(--text-muted); }
         .btn-outline:hover { background-color: var(--th-bg); color: var(--text-main); }
 
-        .matrix-container {
-            background: var(--surface);
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-            border: 1px solid var(--border);
+        /* 3D Canvas Styles */
+        #visualizer-wrapper {
+            width: 100%; height: 500px; background: #1e1e1e; border-radius: 8px;
+            margin: 20px 0; overflow: hidden; border: 1px solid var(--border);
+            position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
+        #visualizer-canvas { width: 100%; height: 100%; display: block; }
 
-        .matrix-title {
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: var(--text-main);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 8px;
-            font-size: 1.2em;
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .matrix-display {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 13px;
-        }
-
-        .matrix-cell {
-            background: var(--matrix-cell-bg);
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
+        .camera-slider-container {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            background: rgba(54, 50, 50, 0.697);
+            padding: 15px;
+            border-radius: 20px;
+            color: rgb(255, 255, 255);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            min-height: 40px;
-            word-break: break-word;
-            color: var(--text-main);
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-start; /* Forces top-alignment */
+            z-index: 10;
         }
 
-        footer {
-            margin-top: 50px;
-            padding: 20px;
+        .slider-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .slider-col span {
+            height: 24px;
+            line-height: 24px;
+            margin-bottom: 12px; /* Uniform gap before the slider starts */
+            display: block;
+            
             text-align: center;
-            color: var(--text-muted);
-            border-top: 1px solid var(--border);
-            font-size: 0.9em;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        /* 1. Base Slider Tracks */
+        #cameraHeight, #cameraZoom {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 6px;
+            height: 200px;
+            background: #26444abb;
+            border-radius: 3px;
+            writing-mode: vertical-lr;
+            direction: rtl;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        /* Reverse the zoom slider so pushing UP = smaller distance (Zoom In) */
+        #cameraZoom {
+            direction: ltr;
+        }
+        #cameraHeight:focus, #cameraZoom:focus {
+            outline: none;
+        }
+        /* Zoom Thumb (Chrome/Edge/Safari) */
+        #cameraZoom::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 26px; height: 26px; background-color: #6e7b8a; border-radius: 50%; cursor: ns-resize;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white'%3E%F0%9F%94%8E%3C/text%3E%3C/svg%3E");
+            background-position: center; background-repeat: no-repeat; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        /* Zoom Thumb (Firefox) */
+        #cameraZoom::-moz-range-thumb {
+            width: 26px; height: 26px; border: none; background-color: var(--primary); border-radius: 50%; cursor: ns-resize;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='14' fill='white'%3E%F0%9F%94%8E%3C/text%3E%3C/svg%3E");
+            background-position: center; background-repeat: no-repeat; box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        /* Rotates the slider to be vertical */
+        /* 1. Base Slider - Remove native appearance lock so custom thumbs work */
+        #cameraHeight {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 6px;
+            height: 200px;
+            background: #444; /* Give the track a nice dark color */
+            border-radius: 3px;
+            writing-mode: vertical-lr; /* Keeps it vertical */
+            direction: rtl; /* Makes it slide bottom-to-top */
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        /* Remove the focus outline */
+        #cameraHeight:focus {
+            outline: none;
+        }
+
+        /* 2. Chrome/Edge/Safari Custom Thumb */
+        #cameraHeight::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 26px;
+            height: 26px;
+            background-color: #565b61;
+            border-radius: 50%;
+            cursor: ns-resize;
+            /* Properly URL-encoded SVG for the ⇕ symbol */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='white'%3E%E2%87%95%3C/text%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* 3. Firefox Custom Thumb */
+        #cameraHeight::-moz-range-thumb {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background-color: var(--primary);
+            border-radius: 50%;
+            cursor: ns-resize;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Ctext x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='white'%3E%E2%87%95%3C/text%3E%3C/svg%3E");
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .matrix-container {
+            background: var(--surface); padding: 20px; margin-top: 20px; border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); overflow-x: auto; border: 1px solid var(--border);
+        }
+        .matrix-title { font-weight: bold; margin-bottom: 15px; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 8px; font-size: 1.2em; font-family: 'Times New Roman', Times, serif; }
+        .matrix-display { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; font-family: 'Courier New', Courier, monospace; font-size: 18px; }
+        .matrix-cell { background: var(--matrix-cell-bg); padding: 10px; border: 1px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; text-align: center; min-height: 60px; word-break: break-word; color: var(--text-main); }
+        /* Highlight styles for the final Transformation Matrix */
+        .matrix-container.final-matrix {
+            border: 2px solid var(--primary);
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
+            background: rgba(37, 99, 235, 0.03); 
+            transform: scale(1.02);
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+        .matrix-container.final-matrix .matrix-title {
+            color: var(--primary);
+            font-size: 1.4em;
+            border-bottom: 2px solid var(--primary);
+        }
+        .dark-mode .matrix-container.final-matrix {
+            box-shadow: 0 8px 15px rgba(59, 130, 246, 0.2);
+            background: rgba(23, 43, 75, 0.05);
+        }
+        /* --- Footer Styles --- */
+        footer { 
+            margin-top: 50px; 
+            padding: 30px 20px; 
+            text-align: center; 
+            color: var(--text-muted); 
+            border-top: 1px solid var(--border); 
+            font-size: 0.95em; 
+            letter-spacing: 0.5px;
+        }
+
+        footer a, footer a:visited, footer a:active {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--text-main);
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+        /* --- Mobile View Optimizations --- */
+        @media (max-width: 600px) {
+            /* Shrink table padding and text size */
+            th, td { padding: 4px 1px !important; font-size: 13px; }
+            
+            /* Shrink the theta button */
+            .btn-mini { padding: 4px 5px; min-width: 26px; font-size: 12px; }
+            
+            /* Squeeze the gap between the theta input and the button */
+            .input-group { gap: 2px; }
+            
+            /* Absolutely lock the Joint column width */
+            #dhTable th:first-child, 
+            #dhTable td:first-child { 
+                width: 25px !important; 
+            }
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 </head>
-<body>
+<body class="dark-mode">
 
-    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme">🌙</button>
+    <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn" title="Toggle Theme"></button>
 
+    <div class="custom-dropdown" id="langDropdown">
+        <button class="dropdown-btn" onclick="toggleLangMenu()">
+            <span id="currentLangText">English</span>
+            <span style="font-size: 10px; opacity: 0.6;">▼</span>
+        </button>
+        <ul class="dropdown-menu">
+            <li onclick="selectLang('en', 'English')">English</li>
+            <li onclick="selectLang('ar', 'العربية')">العربية</li>
+            <li onclick="selectLang('tr', 'Türkçe')">Türkçe</li>
+        </ul>
+    </div>
     <h1>Classic DH Table Matrix Calculator</h1>
     <div class="subtitle">
         <strong>Standard DH Convention</strong> (Rot<sub>z,θ</sub> &rarr; Trans<sub>z,d</sub> &rarr; Trans<sub>x,a</sub> &rarr; Rot<sub>x,α</sub>)<br>
-        Order of Multiplication: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub>
+        Order of Multiplication: T<sub>0&rarr;n</sub> = A<sub>1</sub> &middot; A<sub>2</sub> &middot; ... &middot; A<sub>n</sub> <br>[  sin(θ<sub>1</sub>) as S<sub>1</sub>, cos(θ<sub>1</sub>) as C<sub>1</sub> ]
     </div>
 
     <div class="controls">
-		<button class="btn-danger" onclick="removeRow()"><b>- Remove Joint</b></button>
+        <button class="btn-danger" onclick="removeRow()"><b>- Remove Joint</b></button>
         <button class="btn-secondary" onclick="addRow()"><b>+ Add Joint</b></button>
-		<button class="btn-outline" onclick="clearTable()"><b>🗑️ clear</b></button>
+        <button class="btn-outline" onclick="clearTable()"><b>🗑️ clear</b></button>
     </div>
     
     <table id="dhTable">
         <thead>
             <tr>
-                <th style="width: 60px;">Joint</th>
+                <th>Joint</th>
                 <th>θ (theta)</th>
                 <th>d</th>
                 <th>a</th>
@@ -252,51 +405,123 @@
             </tr>
         </thead>
         <tbody id="tableBody">
-            <!-- Rows generated by JS -->
-        </tbody>
+            </tbody>
     </table>
 
     <div style="text-align: center;">
-        <button class="btn-primary" onclick="calculateTransformation()"><b>= Calculate Transformation Matrix</b></button>
+        <button class="btn-primary" onclick="calculateTransformation()"><b>= Calculate Matrix & Update 3D</b></button>
+    </div>
+    <div id="visualizer-wrapper">
+        <div id="visualizer-canvas"></div>
+    
+        <div class="camera-slider-container">
+            <div class="slider-col">
+                <input type="range" id="cameraZoom" min="1" max="60.4" value="30.7" step="0.1">
+            </div>
+            <div class="slider-col">
+                
+                <input type="range" id="cameraHeight" min="-10" max="40" value="8" step="0.1">
+            </div>
+        </div>
     </div>
 
     <div id="outputArea"></div>
 
     <footer>
-        made by <a href="https://www.linkedin.com/in/shaker-abdullah-94bab5299/">Shaker abdullah<a/> &copy; 2026
+        made by <a href="https://www.linkedin.com/in/shaker-abdullah-94bab5299/">Shaker abdullah</a> &copy; 2026
     </footer>
 
     <script>
         // --- 0. THEME LOGIC ---
+        // --- 0. THEME LOGIC ---
+        const sunSVG = `<svg viewBox="0 0 898 910" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path fill="#FFA50D" d="M 617.889 235.712 C 619.248 235.134 679.202 216.709 707.484 207.987 C 735.292 199.412 763.069 190.734 790.868 182.126 C 791.107 182.052 791.453 182.323 792.302 182.638 C 788.639 189.176 785.096 195.668 781.395 202.07 C 774.328 214.294 767.154 226.456 760.057 238.663 C 749.541 256.753 739.018 274.839 728.564 292.964 C 720.539 306.878 702.461 336.916 701.368 337.976 C 700.41 336.979 676.873 295.883 662.194 279.106 C 650.493 265.731 620.131 237.826 617.889 235.712 Z"/><path fill="#FFA50D" d="M 191.21 337.691 C 190.491 337.907 101.752 184.985 99.925 181.514 C 113.094 185.659 272.434 235.427 272.564 236.3 C 272.708 237.259 271.838 238.739 270.964 239.425 C 244.356 260.311 223.018 285.827 205.299 314.455 C 201.378 320.79 192.662 337.255 191.21 337.691 Z"/><path fill="#FFA50D" d="M 171.998 516.94 C 175.986 530.519 176.046 535.026 179.234 542.464 C 179.838 543.874 194.631 581.985 195.357 583.984 C 134.967 574.859 75.297 565.842 14.12 556.598 C 65 521.873 114.982 487.761 166 452.942 C 166 460.282 168.624 487.117 169.297 493.105 C 170.954 507.843 169.993 501.809 171.998 516.94 Z"/><path fill="#FFA50D" d="M 878.475 556.459 C 868.131 558.131 700.281 583.644 697.083 584.196 C 717.409 542.637 727.435 499.623 727.085 453.215 C 777.596 487.662 827.388 521.619 878.475 556.459 Z"/><path fill="#FFA50D" d="M 624.382 675.221 C 625.841 689.784 637.041 852.157 636.293 854.682 C 630.583 849.747 503.373 735.354 506.266 734.908 C 513.438 733.802 539.995 722.257 553.994 716.849 C 573.89 709.163 592.294 698.498 609.552 685.93 C 614.42 682.385 619.189 678.704 624.382 675.221 Z"/><path fill="#FFA50D" d="M 379.365 185.514 C 382.565 177.094 447.073 17.823 447.574 17.776 C 469.393 73.249 491.211 128.723 513.526 185.461 C 468.605 174.677 424.36 174.521 379.365 185.514 Z"/><path fill="#FFA50D" d="M 255.167 851.999 C 256.099 838.227 266.542 687.946 267.054 682.706 C 267.49 678.237 269.853 676.906 273.659 679.363 C 282.251 684.909 290.462 691.051 299.093 696.533 C 322.388 711.326 347.49 722.032 374.184 729.02 C 376.214 729.551 378.157 730.413 380.186 730.947 C 385.151 732.254 386.01 734.579 382.323 738.107 C 371.688 748.282 256.214 852.01 255.167 851.999 Z"/><path fill="#FFA50D" d="M 637.873 59.067 C 637.564 66.102 627.032 180.145 625.654 180.581 C 609 185.849 592.249 190.809 575.594 196.074 C 572.491 197.055 558.281 161.366 551.709 145.526 C 550.234 141.97 634.662 61.736 637.873 59.067 Z"/><path fill="#FFA50D" d="M 775.68 425.403 C 771.518 422.334 739.947 401.163 728.893 393.476 C 737.813 377.878 747.385 362.979 755.312 347.199 C 758.71 340.435 758.726 340.405 768.598 342.184 C 778.682 344.001 872.091 358.769 875.311 359.653 C 875.252 360.215 798.876 413.2 781.156 425.541 C 778.863 427.138 777.763 426.94 775.68 425.403 Z"/><path fill="#FFA50D" d="M 213.191 699.842 C 203.748 702.69 129.15 725.546 100.252 734.544 C 103.33 728.714 152.994 642.82 158.323 632.987 C 160.14 629.634 219.414 640.332 219.042 644.675 C 217.934 657.605 213.992 699.601 213.191 699.842 Z"/><path fill="#FFA50D" d="M 448.235 750.674 C 449.692 751.44 489.58 789.137 488.247 792.601 C 480.001 814.021 447.994 895.577 445.821 899.239 C 440.725 886.278 404.916 796.411 403.364 791.488 C 402.885 789.968 446.299 750.762 448.235 750.674 Z"/><path fill="#FFA50D" d="M 729.445 629.997 C 732.928 629.46 789.248 729.791 788.958 730.454 C 786.275 730.454 683.976 700.634 677.323 698.663 C 676.888 692.073 674.166 656.043 672.981 644.789 C 672.426 639.519 673.11 638.639 678.288 637.935 C 687.961 636.618 722.04 631.138 729.445 629.997 Z"/><path fill="#FFA50D" d="M 255.487 64.461 C 256.999 63.979 326.038 125.588 339.428 137.865 C 341.788 140.028 327.45 179.726 320.652 197.049 C 302.268 191.314 284.199 185.741 266.205 179.938 C 264.866 179.506 255.681 74.939 255.487 64.461 Z"/><path fill="#FFA50D" d=" M23.000378,358.166656 C35.692173,356.127472 48.364838,353.958588 61.080788,352.083160 C75.761711,349.917908 90.486336,348.050537 105.181252,345.977844 C114.050179,344.726868 122.897316,343.321869 131.758728,342.016602 C132.568558,341.897339 133.411179,342.000732 134.264755,342.000732 C144.169525,359.213165 154.019638,376.330597 164.004562,393.682281 C150.876694,402.498505 137.805222,411.251068 124.761398,420.044617 C113.984100,427.310150 113.993790,427.338684 103.265862,420.041260 C80.585014,404.613098 57.909657,389.176910 35.052948,373.113922 C33.901249,372.026672 32.928650,371.569519 31.956059,371.112366 C31.369900,370.967407 30.783735,370.822479 30.066010,370.033966 C28.443577,367.812134 27.107149,366.039246 25.423693,364.703735 C23.197273,362.937531 21.599295,361.172363 23.000378,358.166656 z"/><path fill="#FFA50D" d=" M22.608723,358.102661 C21.599295,361.172363 23.197273,362.937531 25.423693,364.703735 C27.107149,366.039246 28.443577,367.812134 29.946033,369.752258 C24.998747,366.827789 20.039871,363.541473 14.272893,359.719635 C17.708706,358.992645 19.962887,358.515656 22.608723,358.102661 z"/><path fill="#FFA50D" d=" M32.078506,371.411926 C32.928650,371.569519 33.901249,372.026672 34.915924,372.799377 C34.038994,372.647156 33.119976,372.179321 32.078506,371.411926 z"/><ellipse fill="#FED501" cx="446.803" cy="461.539" rx="230.009" ry="227.373"/></svg>`;
+        const moonSVG = `<svg viewBox="0 0 36 36" width="24" height="24" xmlns="http://www.w3.org/2000/svg"><path fill="#FFD983" d="M30.312.776C32 19 20 32 .776 30.312c8.199 7.717 21.091 7.588 29.107-.429C37.9 21.867 38.03 8.975 30.312.776z"/><path fill="#FFCC4D" d="M30.705 15.915a1.163 1.163 0 1 0 1.643 1.641a1.163 1.163 0 0 0-1.643-1.641zm-16.022 14.38a1.74 1.74 0 0 0 0 2.465a1.742 1.742 0 1 0 0-2.465zm13.968-2.147a2.904 2.904 0 0 1-4.108 0a2.902 2.902 0 0 1 0-4.107a2.902 2.902 0 0 1 4.108 0a2.902 2.902 0 0 1 0 4.107z"/></svg>`;
+
         function toggleTheme() {
             document.body.classList.toggle('dark-mode');
             const btn = document.getElementById('themeBtn');
-            if (document.body.classList.contains('dark-mode')) {
-                btn.textContent = '☀️';
-            } else {
-                btn.textContent = '🌙';
+            btn.innerHTML = document.body.classList.contains('dark-mode') ? sunSVG : moonSVG;
+        }
+        let currentLang = 'en';
+        let translations = {};
+
+        async function loadLanguage(lang) {
+            try {
+                // Pointing directly to the new langs folder
+                const response = await fetch(`langs/${lang}.json`);
+                translations = await response.json();
+                applyTranslations();
+            } catch (error) {
+                console.error("Error loading language file:", error);
             }
         }
 
+        // --- CUSTOM DROPDOWN LOGIC ---
+        function toggleLangMenu() {
+            document.getElementById('langDropdown').classList.toggle('active');
+        }
+
+        function selectLang(langCode, langName) {
+            currentLang = langCode;
+            document.getElementById('currentLangText').textContent = langName;
+            loadLanguage(currentLang);
+            document.getElementById('langDropdown').classList.remove('active');
+        }
+
+        // Close the dropdown if the user clicks anywhere else on the screen
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('langDropdown');
+            if (!dropdown.contains(event.target)) {
+                dropdown.classList.remove('active');
+            }
+        });
+
+        function applyTranslations() {
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Text Elements
+            document.querySelector('h1').innerHTML = translations['title'] || 'Classic DH Table Matrix Calculator';
+            document.querySelector('.subtitle').innerHTML = translations['subtitle'] || '';
+            document.querySelector('.btn-danger').innerHTML = translations['btn-remove'] || '<b>- Remove Joint</b>';
+            document.querySelector('.btn-secondary').innerHTML = translations['btn-add'] || '<b>+ Add Joint</b>';
+            document.querySelector('.btn-outline').innerHTML = translations['btn-clear'] || '<b>🗑️ clear</b>';
+            document.querySelector('.btn-primary').innerHTML = translations['btn-calc'] || '<b>= Calculate Matrix & Update 3D</b>';
+            document.querySelector('footer').innerHTML = translations['made-by'] || '';
+  
+
+            // Table Headers
+            const ths = document.querySelectorAll('#dhTable th');
+            if (ths.length > 4) {
+                ths[0].innerHTML = translations['th-joint'] || 'Joint';
+                ths[1].innerHTML = translations['th-theta'] || 'θ (theta)';
+                ths[2].innerHTML = translations['th-d'] || 'd';
+                ths[3].innerHTML = translations['th-a'] || 'a';
+                ths[4].innerHTML = translations['th-alpha'] || 'α (alpha)';
+            }
+
+            // Update placeholders
+            document.querySelectorAll('.input-theta').forEach((el, i) => el.placeholder = `${translations['ph-theta'] || 'θ'}${i+1}*`);
+            document.querySelectorAll('.input-d').forEach((el, i) => el.placeholder = `${translations['ph-d'] || 'd'}${i+1}*`);
+            document.querySelectorAll('.input-a').forEach((el, i) => el.placeholder = `${translations['ph-a'] || 'a'}${i+1}`);
+            document.querySelectorAll('.input-alpha').forEach(el => el.placeholder = translations['ph-alpha'] || 'α°');
+        }
         // --- 1. SYMBOLIC MATH ENGINE ---
         const Sym = {
-            isZero: (val) => val === 0 || val === "0" || val === -0,
+            isZero: (val) => val === 0 || val === "0" || val === -0 || val === "",
             isOne: (val) => val === 1 || val === "1",
             parseExpression: (expr) => {
                 const str = String(expr).replace(/\s+/g, '');
                 const match = str.match(/^([a-zA-Z_θ][a-zA-Z0-9_θ]*)([+-])(\d+(?:\.\d+)?)$/);
                 if (match) {
-                    const term = match[1];
-                    const op = match[2];
                     let val = parseFloat(match[3]);
-                    if (op === '-') val = -val;
-                    return { term, offset: val };
+                    if (match[2] === '-') val = -val;
+                    return { term: match[1], offset: val };
                 }
                 return { term: str, offset: 0 };
             },
             formatSymbol: (funcType, val) => {
                 const thetaMatch = String(val).match(/^(?:theta|q|t|θ)_?(\d+)$/i);
-                const sub = thetaMatch ? `<sub>${thetaMatch[1]}</sub>` : `(${val})`;
+                const sub = thetaMatch ? `${thetaMatch[1]}` : `(${val})`;
                 return (funcType === 'cos' ? 'C' : 'S') + sub;
             },
             mult: (a, b) => {
@@ -305,8 +530,7 @@
                 if (Sym.isOne(b)) return a;
                 if (a === -1) return Sym.negate(b);
                 if (b === -1) return Sym.negate(a);
-                const numA = parseFloat(a);
-                const numB = parseFloat(b);
+                const numA = parseFloat(a), numB = parseFloat(b);
                 if (!isNaN(numA) && !isNaN(numB)) return numA * numB;
                 const strA = (typeof a === 'string' && (a.includes('+') || a.includes('-')) && !a.startsWith('-')) ? `(${a})` : a;
                 const strB = (typeof b === 'string' && (b.includes('+') || b.includes('-')) && !b.startsWith('-')) ? `(${b})` : b;
@@ -315,8 +539,7 @@
             add: (a, b) => {
                 if (Sym.isZero(a)) return b;
                 if (Sym.isZero(b)) return a;
-                const numA = parseFloat(a);
-                const numB = parseFloat(b);
+                const numA = parseFloat(a), numB = parseFloat(b);
                 if (!isNaN(numA) && !isNaN(numB)) return numA + numB;
                 return `${a} + ${b}`;
             },
@@ -327,19 +550,17 @@
                 return `-${val}`;
             },
             cos: (val) => {
-                if (!val && val !== 0) return 1;
+                if (val === "" || (!val && val !== 0)) return 1;
                 const num = parseFloat(val);
                 if (!isNaN(num)) {
-                    const rad = num * (Math.PI / 180);
-                    let res = Math.cos(rad);
+                    let res = Math.cos(num * (Math.PI / 180));
                     if (Math.abs(res) < 1e-10) res = 0;
                     if (Math.abs(res - 1) < 1e-10) res = 1;
                     if (Math.abs(res + 1) < 1e-10) res = -1;
                     return res;
                 }
                 const { term, offset } = Sym.parseExpression(val);
-                let shift = offset % 360;
-                if (shift < 0) shift += 360;
+                let shift = offset % 360; if (shift < 0) shift += 360;
                 if (Math.abs(shift) < 1e-5) return Sym.formatSymbol('cos', term);
                 if (Math.abs(shift - 90) < 1e-5) return Sym.negate(Sym.formatSymbol('sin', term));
                 if (Math.abs(shift - 180) < 1e-5) return Sym.negate(Sym.formatSymbol('cos', term));
@@ -347,19 +568,17 @@
                 return `C(${val})`;
             },
             sin: (val) => {
-                if (!val && val !== 0) return 0;
+                if (val === "" || (!val && val !== 0)) return 0;
                 const num = parseFloat(val);
                 if (!isNaN(num)) {
-                    const rad = num * (Math.PI / 180);
-                    let res = Math.sin(rad);
+                    let res = Math.sin(num * (Math.PI / 180));
                     if (Math.abs(res) < 1e-10) res = 0;
                     if (Math.abs(res - 1) < 1e-10) res = 1;
                     if (Math.abs(res + 1) < 1e-10) res = -1;
                     return res;
                 }
                 const { term, offset } = Sym.parseExpression(val);
-                let shift = offset % 360;
-                if (shift < 0) shift += 360;
+                let shift = offset % 360; if (shift < 0) shift += 360;
                 if (Math.abs(shift) < 1e-5) return Sym.formatSymbol('sin', term);
                 if (Math.abs(shift - 90) < 1e-5) return Sym.formatSymbol('cos', term);
                 if (Math.abs(shift - 180) < 1e-5) return Sym.negate(Sym.formatSymbol('sin', term));
@@ -369,32 +588,23 @@
         };
 
         // --- 2. MATRIX LOGIC ---
-        function createIdentityMatrix() {
-            return [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-        }
-
+        function createIdentityMatrix() { return [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]; }
         function getDHMatrix(theta, d, a, alpha) {
-            const cT = Sym.cos(theta);
-            const sT = Sym.sin(theta);
-            const cA = Sym.cos(alpha);
-            const sA = Sym.sin(alpha);
+            const cT = Sym.cos(theta), sT = Sym.sin(theta);
+            const cA = Sym.cos(alpha), sA = Sym.sin(alpha);
             return [
                 [cT, Sym.negate(Sym.mult(sT, cA)), Sym.mult(sT, sA), Sym.mult(a, cT)],
                 [sT, Sym.mult(cT, cA), Sym.negate(Sym.mult(cT, sA)), Sym.mult(a, sT)],
-                [0, sA, cA, d || 0],
-                [0, 0, 0, 1]
+                [0, sA, cA, d || 0], [0, 0, 0, 1]
             ];
         }
-
         function multiplyMatrices(m1, m2) {
             let result = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-            for(let row = 0; row < 4; row++) {
-                for(let col = 0; col < 4; col++) {
+            for(let r = 0; r < 4; r++) {
+                for(let c = 0; c < 4; c++) {
                     let sum = 0;
-                    for(let k = 0; k < 4; k++) {
-                        sum = Sym.add(sum, Sym.mult(m1[row][k], m2[k][col]));
-                    }
-                    result[row][col] = sum;
+                    for(let k = 0; k < 4; k++) sum = Sym.add(sum, Sym.mult(m1[r][k], m2[k][c]));
+                    result[r][c] = sum;
                 }
             }
             return result;
@@ -402,24 +612,26 @@
 
         // --- 3. UI HANDLING ---
         let rowCount = 0;
-
         function addRow() {
             rowCount++;
             const tbody = document.getElementById('tableBody');
             const tr = document.createElement('tr');
+            // Rule 2: Start with entirely empty inputs
+            const pTheta = translations['ph-theta'] || 'θ';
+            const pD = translations['ph-d'] || 'd';
+            const pA = translations['ph-a'] || 'a';
+            const pAlpha = translations['ph-alpha'] || 'α°';
+
             tr.innerHTML = `
                 <td>${rowCount}</td>
-                <td>
-                    <div class="input-group">
-                        <input type="text" class="input-theta" placeholder="θ${rowCount}*">
-                        <button class="btn-mini" onclick="insertTheta(this)" title="Insert theta${rowCount}">θ</button>
-                    </div>
-                </td>
-                <td><input type="text" class="input-d" placeholder="d${rowCount}*"></td>
-                <td><input type="text" class="input-a" placeholder="a${rowCount}"></td>
-                <td><input type="text" class="input-alpha" placeholder="α°"></td>
+                <td><div class="input-group"><input type="text" class="input-theta" placeholder="${pTheta}${rowCount}*">
+                    <button class="btn-mini" onclick="insertTheta(this)">θ</button></div></td>
+                <td><input type="text" class="input-d" placeholder="${pD}${rowCount}*"></td>
+                <td><input type="text" class="input-a" placeholder="${pA}${rowCount}"></td>
+                <td><input type="text" class="input-alpha" placeholder="${pAlpha}"></td>
             `;
             tbody.appendChild(tr);
+            if(robotBase) build3DRobot(); 
         }
 
         function removeRow() {
@@ -427,45 +639,40 @@
                 const tbody = document.getElementById('tableBody');
                 tbody.removeChild(tbody.lastElementChild);
                 rowCount--;
+                build3DRobot(); 
             }
         }
         
         function clearTable() {
-            const inputs = document.querySelectorAll('#dhTable input');
-            inputs.forEach(input => input.value = '');
+            document.querySelectorAll('#dhTable input').forEach(input => input.value = '');
+            
+            // Bring all the hidden theta buttons back
+            document.querySelectorAll('.btn-mini').forEach(btn => btn.style.display = 'block'); 
+            
             document.getElementById('outputArea').innerHTML = '';
+            build3DRobot();
         }
 
         function insertTheta(btn) {
-            const row = btn.closest('tr');
-            const jointNum = row.cells[0].textContent;
             const input = btn.previousElementSibling;
-            input.value = "theta" + jointNum;
-            input.focus();
+            input.value = "theta" + btn.closest('tr').cells[0].textContent;
+            
+            // UX Magic: Hide the button to give the input box more room!
+            btn.style.display = 'none'; 
         }
 
-        window.onload = function() {
-            addRow(); addRow(); addRow();
-        };
-
-        function renderMatrix(matrix, title) {
+        function renderMatrix(matrix, title, isFinal = false) {
             const container = document.getElementById('outputArea');
             const wrapper = document.createElement('div');
-            wrapper.className = 'matrix-container';
-
-            const titleDiv = document.createElement('div');
-            titleDiv.className = 'matrix-title';
-            titleDiv.innerHTML = title;
-            wrapper.appendChild(titleDiv);
-
+            wrapper.className = 'matrix-container' + (isFinal ? ' final-matrix' : '');
+            wrapper.innerHTML = `<div class="matrix-title">${title}</div>`;
+            // ... the rest of the grid generation stays exactly the same
             const grid = document.createElement('div');
             grid.className = 'matrix-display';
-
             for (let i = 0; i < 4; i++) {
                 for (let j = 0; j < 4; j++) {
                     const cell = document.createElement('div');
-                    cell.className = 'matrix-cell';
-                    cell.innerHTML = matrix[i][j];
+                    cell.className = 'matrix-cell'; cell.innerHTML = matrix[i][j];
                     grid.appendChild(cell);
                 }
             }
@@ -474,27 +681,374 @@
         }
 
         function calculateTransformation() {
-            const outputArea = document.getElementById('outputArea');
-            outputArea.innerHTML = '';
+            document.getElementById('outputArea').innerHTML = '';
             const rows = document.querySelectorAll('#tableBody tr');
             let T_Accumulated = createIdentityMatrix();
 
             rows.forEach((row, index) => {
-                const theta = row.querySelector('.input-theta').value.trim();
-                const d = row.querySelector('.input-d').value.trim();
-                const a = row.querySelector('.input-a').value.trim();
-                const alpha = row.querySelector('.input-alpha').value.trim();
-                const T_Current = getDHMatrix(theta, d, a, alpha);
+                const theta = row.querySelector('.input-theta').value.trim() || "0";
+                const d = row.querySelector('.input-d').value.trim() || "0";
+                const a = row.querySelector('.input-a').value.trim() || "0";
+                const alpha = row.querySelector('.input-alpha').value.trim() || "0";
                 
-                // Notation: T with index in superscript and index+1 in subscript
+                const T_Current = getDHMatrix(theta, d, a, alpha);
                 renderMatrix(T_Current, `T<sup>${index}</sup><sub>${index+1}</sub> =`);
                 T_Accumulated = multiplyMatrices(T_Accumulated, T_Current);
             });
+            // Add 'true' to trigger the final-matrix CSS highlight
+            renderMatrix(T_Accumulated, `T<sup>0</sup><sub>${rows.length}</sub> =`, true);
+            
+            build3DRobot();
 
-            renderMatrix(T_Accumulated, `T<sup>0</sup><sub>${rows.length}</sub> =`);
+            // Rule 6: Autoscroll to 3D canvas
+            setTimeout(() => {
+                document.getElementById('visualizer-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
         }
+
+        // --- 4. THREE.JS 3D VISUALIZER ---
+        let scene, camera, renderer, controls, robotBase;
+        let hudScene, hudCamera;
+
+        function init3D() {
+            const container = document.getElementById('visualizer-canvas');
+            
+            // Main Scene
+            scene = new THREE.Scene();
+            THREE.Object3D.DefaultUp.set(0, 0, 1); 
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(20, 20, 20);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.autoClear = false; // Allows HUD rendering on top
+            container.appendChild(renderer.domElement);
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(20, 20, 20);
+            scene.add(dirLight);
+
+            // World Axis Base
+            scene.add(createXYZAxesHelper(4));
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            const fixedTilt = Math.PI / 2.6; // ~81.8 degrees for a more top-down view
+            controls.minPolarAngle = fixedTilt; 
+            controls.maxPolarAngle = fixedTilt;
+
+            // Link HTML slider to Camera Z-Height (Prismatic Pan)
+            document.getElementById('cameraHeight').addEventListener('input', (e) => {
+                const newZ = parseFloat(e.target.value);
+                // The difference between where we were and where we are now
+                const deltaZ = newZ - controls.target.z;
+                
+                camera.position.z += deltaZ;
+                controls.target.z = newZ;
+                
+                controls.update();
+            });
+            // Link HTML slider to Camera Zoom (Distance from target)
+            document.getElementById('cameraZoom').addEventListener('input', (e) => {
+                const targetDistance = parseFloat(e.target.value);
+                const direction = new THREE.Vector3().subVectors(camera.position, controls.target).normalize();
+                
+                // Move camera along its line of sight to the target
+                camera.position.copy(controls.target).add(direction.multiplyScalar(targetDistance));
+                controls.update();
+            });
+
+            // Sync the zoom slider if the user scrolls/pinches manually inside the canvas
+            controls.addEventListener('change', () => {
+                const currentDist = camera.position.distanceTo(controls.target);
+                document.getElementById('cameraZoom').value = currentDist;
+            });
+
+            controls.enablePan = false;
+            controls.target.set(0, 0, 8); // Shift camera focus 8 units up the Z-axis
+            robotBase = new THREE.Group();
+            scene.add(robotBase);
+
+            // Add Square Foundation
+            const baseGeo = new THREE.BoxGeometry(6, 6, 0.5);
+            const baseMat = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+            baseMesh.position.z = -1; // Shift down so the top rests exactly at Z=0
+            scene.add(baseMesh);
+
+            // Rule 3: HUD Scene for Bottom-Left Corner Axes
+            hudScene = new THREE.Scene();
+            hudCamera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
+            hudCamera.position.set(0, 0, 4); // Static position looking at origin
+            hudScene.add(new THREE.AmbientLight(0xffffff, 1));
+            
+            // Add a slightly thicker custom axis to the HUD
+            // 3. Custom HUD with Arrows and Text
+            const hudAxes = new THREE.Group();
+            const origin = new THREE.Vector3(0, 0, 0);
+            
+            // X (Red)
+            hudAxes.add(new THREE.ArrowHelper(new THREE.Vector3(1,0,0), origin, 1.2, 0xff0000, 0.3, 0.2));
+            const lblX = createLabel("X"); lblX.position.set(1.5, 0, 0); lblX.scale.set(1.5, 0.8, 1); hudAxes.add(lblX);
+            
+            // Y (Blue)
+            hudAxes.add(new THREE.ArrowHelper(new THREE.Vector3(0,1,0), origin, 1.2, 0x017191, 0.3, 0.2));
+            const lblY = createLabel("Y"); lblY.position.set(0, 1.5, 0); lblY.scale.set(1.5, 0.8, 1); hudAxes.add(lblY);
+            
+            // Z (Green)
+            hudAxes.add(new THREE.ArrowHelper(new THREE.Vector3(0,0,1), origin, 1.2, 0x00ff00, 0.3, 0.2));
+            const lblZ = createLabel("Z"); lblZ.position.set(0, 0, 1.5); lblZ.scale.set(1.5, 0.8, 1); hudAxes.add(lblZ);
+            hudScene.add(hudAxes);
+
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+
+            animate();
+        }
+
+        // Rule 1: Custom XYZ Axes (Red=X, Blue=Y, Green=Z)
+        function createXYZAxesHelper(size) {
+            const group = new THREE.Group();
+            
+            // X - Red
+            const matX = new THREE.LineBasicMaterial({ color: 0xff0000 });
+            const geoX = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(size,0,0)]);
+            group.add(new THREE.Line(geoX, matX));
+            
+            // Y - Blue
+            const matY = new THREE.LineBasicMaterial({ color: 0x017191 });
+            const geoY = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,size,0)]);
+            group.add(new THREE.Line(geoY, matY));
+            
+            // Z - Green
+            const matZ = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+            const geoZ = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,size)]);
+            group.add(new THREE.Line(geoZ, matZ));
+
+            return group;
+        }
+
+        function createLabel(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256; canvas.height = 128;
+            const context = canvas.getContext('2d');
+            context.font = "Bold 60px Arial";
+            context.fillStyle = "white";
+            context.textAlign = "center";
+            context.fillText(text, 128, 80);
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+            const sprite = new THREE.Sprite(spriteMaterial);
+            sprite.scale.set(3, 1.5, 1);
+            return sprite;
+        }
+
+        // Rule 4 Updates: Base lengths are truly 0 if empty
+        function parseLinkValue(val) {
+            val = String(val).trim();
+            if (val === '' || val === '0') return { length: 0, isLetter: false }; 
+            if (/[a-zA-Z]/.test(val)) return { length: 5, isLetter: true, label: val }; 
+            return { length: parseFloat(val) || 0, isLetter: false };
+        }
+
+        function parseAlphaDegrees(val) {
+            if (/pi/i.test(val)) return (Math.PI / 2) * (val.includes('-') ? -1 : 1);
+            const num = parseFloat(val);
+            return isNaN(num) ? 0 : num * (Math.PI / 180);
+        }
+
+        function build3DRobot() {
+            // Clean up GPU memory before rebuilding
+            while(robotBase.children.length > 0) {
+                const child = robotBase.children[0];
+                robotBase.remove(child);
+                child.traverse((object) => {
+                    if (object.geometry) object.geometry.dispose();
+                    if (object.material) {
+                        if (Array.isArray(object.material)) {
+                            object.material.forEach(mat => mat.dispose());
+                        } else {
+                            object.material.dispose();
+                        }
+                    }
+                });
+            }
+            
+            let currentFrame = robotBase;
+            const rows = document.querySelectorAll('#tableBody tr');
+
+            rows.forEach((row) => {
+                const t_in = row.querySelector('.input-theta').value;
+                const d_in = row.querySelector('.input-d').value;
+                const a_in = row.querySelector('.input-a').value;
+                const al_in = row.querySelector('.input-alpha').value;
+
+                const isPrismatic = /[a-zA-Z]/.test(d_in) && !/[a-zA-Z]/.test(t_in);
+                const dData = parseLinkValue(d_in);
+                const aData = parseLinkValue(a_in);
+                const alphaVis = parseAlphaDegrees(al_in);
+                // Parse theta to extract constant offsets (e.g., "theta1-90" becomes -90)
+                let thetaOffset = 0;
+                if (t_in) {
+                    const parsedNum = parseFloat(t_in);
+                    // If it's a pure number (no letters)
+                    if (!isNaN(parsedNum) && !/[a-zA-Z_θ]/.test(t_in)) {
+                        thetaOffset = parsedNum;
+                    } else {
+                        // If it's an expression, extract the + or - offset
+                        thetaOffset = Sym.parseExpression(t_in).offset;
+                    }
+                }
+                const thetaVis = thetaOffset * (Math.PI / 180); 
+
+                const jointGroup = new THREE.Group();
+                
+                // 1. Joint Core
+                if (isPrismatic) {
+                    // Main base cube
+                    const geo = new THREE.BoxGeometry(1.2, 1.2, 1.2);
+                    const mat = new THREE.MeshPhongMaterial({ color: 0x4444ff });
+                    jointGroup.add(new THREE.Mesh(geo, mat));
+
+                    // Smaller sliding extension cube on the Z-face
+                    const smallGeo = new THREE.BoxGeometry(0.7, 0.7, 0.6);
+                    const smallMat = new THREE.MeshPhongMaterial({ color: 0x6666ff }); // slightly lighter blue
+                    const smallCube = new THREE.Mesh(smallGeo, smallMat);
+                    smallCube.position.z = 0.8; // 0.6 (half main) + 0.3 (half small) perfectly flushes them
+                    jointGroup.add(smallCube);
+                } else {
+                    // Revolute cylinder
+                    const geo = new THREE.CylinderGeometry(0.6, 0.6, 1.2, 32);
+                    geo.rotateX(Math.PI / 2); 
+                    const mat = new THREE.MeshPhongMaterial({ color: 0xffaa44 });
+                    jointGroup.add(new THREE.Mesh(geo, mat));
+                }
+
+                // 2. D-H Math Matrix Visualized
+                const dhTransform = new THREE.Group();
+                dhTransform.rotation.z = thetaVis;
+                dhTransform.position.z = dData.length; 
+
+                const nextFrame = new THREE.Group();
+                nextFrame.position.x = aData.length; 
+                nextFrame.rotation.x = alphaVis;
+                
+                dhTransform.add(nextFrame);
+                jointGroup.add(dhTransform);
+
+                // 3. User Parameters Length Links
+                // Helper function to create a "ball joint" sphere to smooth out corners
+                const createElbow = (colorHex) => new THREE.Mesh(
+                    new THREE.SphereGeometry(0.2, 16, 16), 
+                    new THREE.MeshPhongMaterial({ color: colorHex })
+                );
+
+                if (aData.length !== 0) {
+                    const linkA = new THREE.CylinderGeometry(0.2, 0.2, Math.abs(aData.length), 16);
+                    linkA.rotateZ(Math.PI / 2);
+                    linkA.translate(aData.length / 2, 0, 0);
+                    dhTransform.add(new THREE.Mesh(linkA, new THREE.MeshPhongMaterial({ color: 0xaaaaaa })));
+                    
+                    // Cap the end of the 'a' link
+                    const endSphereA = createElbow(0xaaaaaa);
+                    endSphereA.position.set(aData.length, 0, 0);
+                    dhTransform.add(endSphereA);
+
+                    if (aData.isLetter) {
+                        const lbl = createLabel(aData.label);
+                        lbl.position.set(aData.length / 2, 0.8, 0); 
+                        dhTransform.add(lbl);
+                    }
+                }
+                
+                if (dData.length !== 0) {
+                    const linkD = new THREE.CylinderGeometry(0.2, 0.2, Math.abs(dData.length), 16);
+                    linkD.rotateX(Math.PI / 2);
+                    linkD.translate(0, 0, dData.length / 2);
+                    jointGroup.add(new THREE.Mesh(linkD, new THREE.MeshPhongMaterial({ color: 0x888888 })));
+                    
+                    if (dData.isLetter) {
+                        const lbl = createLabel(dData.label);
+                        lbl.position.set(0.8, 0, dData.length / 2);
+                        jointGroup.add(lbl);
+                    }
+                }
+
+                // Add a primary ball bearing right at the intersection of D and A
+                if (aData.length !== 0 || dData.length !== 0) {
+                    const elbowSphere = createElbow(0x999999); 
+                    // Placed at the dhTransform origin (the exact corner where D ends and A begins)
+                    dhTransform.add(elbowSphere);
+                }
+
+                // Custom Local Frame at the structural joint
+                
+
+                currentFrame.add(jointGroup);
+                // --- Prevent Joint Overlap (Distance 0) ---
+                if (aData.length === 0 && dData.length === 0) {
+                    // Draw a small 1-unit visual spacer along the NEW Z-axis
+                    const overlapGeo = new THREE.CylinderGeometry(0.15, 0.15, 1, 16);
+                    overlapGeo.rotateX(Math.PI / 2); // Align with Z
+                    overlapGeo.translate(0, 0, 0.5); // Push forward by half so it starts at origin
+                    const overlapMat = new THREE.MeshPhongMaterial({ color: 0x555555 });
+                    nextFrame.add(new THREE.Mesh(overlapGeo, overlapMat));
+
+                    // Shift the starting point for the NEXT joint by +1 unit in Z
+                    const shiftedFrame = new THREE.Group();
+                    shiftedFrame.position.z = 1.5;
+                    nextFrame.add(shiftedFrame);
+                    currentFrame = shiftedFrame;
+                } else {
+                    currentFrame = nextFrame; 
+                }
+
+                // NEW SPOT: Add the axes helper here so it always translates with the shifted joint!
+                currentFrame.add(createXYZAxesHelper(2.5));
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            const container = document.getElementById('visualizer-canvas');
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            // 1. Render Main Scene
+            renderer.setViewport(0, 0, width, height);
+            renderer.clear();
+            renderer.render(scene, camera);
+
+            // 2. Render HUD (Bottom Left)
+            // Copy camera angle but keep distance fixed
+            hudCamera.position.copy(camera.position).normalize().multiplyScalar(4);
+            hudCamera.lookAt(0, 0, 0);
+            
+            renderer.setScissorTest(true);
+            renderer.setScissor(10, 10, 120, 120);
+            renderer.setViewport(10, 10, 120, 120);
+            renderer.clearDepth(); 
+            renderer.render(hudScene, hudCamera);
+            renderer.setScissorTest(false);
+           
+        }
+
+        window.onload = function() {
+            document.getElementById('themeBtn').innerHTML = document.body.classList.contains('dark-mode') ? sunSVG : moonSVG;
+            loadLanguage('en'); // Loads the English JSON immediately
+            init3D();
+            addRow(); addRow(); addRow(); 
+            build3DRobot();
+        };
+
     </script>
 </body>
-
 </html>
-
