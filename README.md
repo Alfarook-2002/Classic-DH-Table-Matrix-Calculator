@@ -14,7 +14,7 @@ Standard Notation: Outputs results using $C_i$ and $S_i$ notation with proper su
 ## Added 3D model Visualization
 ![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/3D%20model.gif?raw=true)
 ### The matrix
-![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/The%20Matrix.png?raw=true)
+![alt text](https://github.com/Alfarook-2002/Classic-DH-Table-Matrix-Calculator/blob/main/media/The%20Matrix.jpg?raw=true)
 ## How to Use
 - Enter Parameters: Fill in the $\theta$, $d$, $a$, and $\alpha$ values for each joint.
 - Use numbers for constants (e.g., 90, 0).
